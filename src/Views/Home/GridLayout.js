@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { indexRequest } from "../../apiroute";
 import ElChart from "./ElChart";
 
+
 const ResponsiveGridLayout = WidthProvider(Responsive);
 const GridLayout = ()=>{
     const tabValue = useSelector((state) => state.index.tabValue);

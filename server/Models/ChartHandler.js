@@ -43,6 +43,17 @@ const ChartHandler = {
         });
         return {labels:labels,datasets:datasets};
     },
+    GetDistrictData:async(tableschema,certificate)=>{
+        var districtData = await db.FindList(`SELECT county_name,township_name,COUNT(*) AS value FROM ${tableschema}."Nurse_County_Ship" Where Nurse_Certificate = '99' GROUP BY COUNTY_NAME,TOWNSHIP_NAME`);
+        var labels = [];
+        var datasets = [{label:"All",data:[]}];
+        districtData.forEach((el)=>{
+            labels.push(el.county_name+el.township_name);
+            datasets[0].data.push(el.value);
+        });
+
+        return {labels:labels,datasets:datasets};
+    },
     GetPaymentCodeData:async(tableschema,year,month)=>{
         var PaymentCodeData = await db.FindList(`SELECT paymentcode As labels,COUNT(*) As value FROM ${tableschema}.duty_detail Where duty_year = '2022'
         and duty_month = '08' GROUP BY paymentcode`)

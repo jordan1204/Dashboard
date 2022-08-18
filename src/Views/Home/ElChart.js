@@ -1,9 +1,18 @@
-import React,{useEffect} from "react";
+import React,{useEffect,useState} from "react";
 import { chartRequest } from "../../apiroute";
 import CommonUtil from "../../Common/CommonUtil";
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+    DashboardItem: {
+      width: '95%',
+      height:"95%"
+    },
+  });
 
 const ElChart = ({id})=>{
-    const [chart,setChart] =  React.useState(null);
+    const [chart,setChart] =  useState(null);
+    const classes = useStyles();
     useEffect(()=>{
         chartRequest.get("/GetChartInfo",{params:{id:id}}).then(function(res){
             const apiName = res.data.source_api;
@@ -17,7 +26,7 @@ const ElChart = ({id})=>{
         })
     },[]);
     return (
-        <div>{chart}</div>
+        <div className={classes.DashboardItem}>{chart}</div>
     );
 }
 
