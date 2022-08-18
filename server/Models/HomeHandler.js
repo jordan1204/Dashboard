@@ -12,6 +12,12 @@ const HomeHandler = {
     GetDashboardDataBindList:async(dashboard_id)=>{
         var dashboarddatabindList = await db.FindListWithParameter('SELECT chart_id,lg,md,sm,xs,xxs FROM dashboard.sys_dashboard_databind Where dashboard_id = $1',[dashboard_id]);
         return dashboarddatabindList;
+    },
+
+    GetCertificateList:async (tableschema)=>{
+        var CertificateList = await db.FindList(` select Code_no as value , CODE_NAME  as name from  ${tableschema}.CODE_TYPE  where CODE_TYPE='Nurse_Certificate' `);
+       
+        return  CertificateList
     }
 }
 
