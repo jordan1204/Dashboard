@@ -37,7 +37,7 @@ const ChartHandler = {
         var labels = [];
         var datasets = [{label:"All",data:[]}];
 
-        dutydetailData.forEach((el)=>{
+        DutydetailData.forEach((el)=>{
             labels.push(el.labels);
             datasets[0].data.push(el.value);
         });
