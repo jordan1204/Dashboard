@@ -7,6 +7,7 @@ const ChartHandler = {
     },
     GetNurseSexData : async (tableschema,certificate)=>{
         var nursesexData = await db.FindList(`SELECT CASE WHEN nurse_sex = '1' THEN '男' ELSE '女' END AS labels,COUNT(*) AS value FROM ${tableschema}."Nurse_Sex"  Where nurse_certificate = '99' GROUP BY nurse_sex ORDER BY nurse_sex asc`);
+        
         var labels = [];
         var datasets = [{label:"All",data:[]}];
 
@@ -31,10 +32,28 @@ const ChartHandler = {
         return {labels:labels,datasets:datasets};
     },
     GetDutyDetailData:async(tableschema,year,month)=>{
-        return {labels:[],datasets:[{label:"All",data:[]}]};
+
+        var DutydetailData = await db.FindList(`SELECT duty_day As labels,COUNT(*) As value FROM ${tableschema}.duty_detail Where duty_year = '2022' and duty_month = '08' GROUP BY duty_day`)
+        var labels = [];
+        var datasets = [{label:"All",data:[]}];
+
+        dutydetailData.forEach((el)=>{
+            labels.push(el.labels);
+            datasets[0].data.push(el.value);
+        });
+        return {labels:labels,datasets:datasets};
     },
     GetPaymentCodeData:async(tableschema,year,month)=>{
-        return {labels:[],datasets:[{label:"All",data:[]}]};
+        var PaymentCodeData = await db.FindList(`SELECT paymentcode As labels,COUNT(*) As value FROM ${tableschema}.duty_detail Where duty_year = '2022'
+        and duty_month = '08' GROUP BY paymentcode`)
+        var labels = [];
+        var datasets = [{label:"All",data:[]}];
+
+        PaymentCodeData.forEach((el)=>{
+            labels.push(el.labels);
+            datasets[0].data.push(el.value);
+        });
+        return {labels:labels,datasets:datasets};
     }
 }
 
