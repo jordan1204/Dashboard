@@ -24,7 +24,7 @@ const HomeTabs = ({children}) => {
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={tabValue} onChange={handleChange}>
+                <Tabs value={tabValue} onChange={handleChange} variant="scrollable" scrollButtons="auto">
                     {tablist.map((el) => {
                         return <Tab label={el.dashboard_name} value={el.data_id}/>
                     })}

@@ -26,6 +26,12 @@ chartController.get("/dutydetail",async function(req,res){
     res.send(chartData);
 });
 
+chartController.get("/nurse_districts",async function(req,res){
+    const tableschema = req.query.tableschema;
+    const chartData = await chartHandler.GetDistrictData(tableschema);
+    res.send(chartData);
+});
+
 chartController.get("/paymentcode",async function(req,res){
     const tableschema = req.query.tableschema;
     const chartData = await chartHandler.GetPaymentCodeData(tableschema);

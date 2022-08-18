@@ -33,6 +33,17 @@ const ChartHandler = {
     GetDutyDetailData:async(tableschema,year,month)=>{
         return {labels:[],datasets:[{label:"All",data:[]}]};
     },
+    GetDistrictData:async(tableschema,certificate)=>{
+        var districtData = await db.FindList(`SELECT county_name,township_name,COUNT(*) AS value FROM ${tableschema}."Nurse_County_Ship" Where Nurse_Certificate = '99' GROUP BY COUNTY_NAME,TOWNSHIP_NAME`);
+        var labels = [];
+        var datasets = [{label:"All",data:[]}];
+        districtData.forEach((el)=>{
+            labels.push(el.county_name+el.township_name);
+            datasets[0].data.push(el.value);
+        });
+
+        return {labels:labels,datasets:datasets};
+    },
     GetPaymentCodeData:async(tableschema,year,month)=>{
         return {labels:[],datasets:[{label:"All",data:[]}]};
     }
