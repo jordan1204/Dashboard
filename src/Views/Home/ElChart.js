@@ -2,6 +2,8 @@ import React,{useEffect,useState} from "react";
 import { chartRequest } from "../../apiroute";
 import CommonUtil from "../../Common/CommonUtil";
 import { makeStyles } from '@mui/styles';
+import { useSelector,useDispatch } from "react-redux";
+import qs from 'qs';
 
 const useStyles = makeStyles({
     DashboardItem: {
@@ -13,18 +15,24 @@ const useStyles = makeStyles({
 const ElChart = ({id})=>{
     const [chart,setChart] =  useState(null);
     const classes = useStyles();
+    const conditionValue = useSelector((state) => state.index.conditionValue);
+    const search = useSelector((state)=>state.index.search);
     useEffect(()=>{
+        console.log(search);
         chartRequest.get("/GetChartInfo",{params:{id:id}}).then(function(res){
             const apiName = res.data.source_api;
             const chartType = res.data.chart_type;
             const chartName = res.data.chart_name;
             let options = CommonUtil.chartOptions(chartName);
-            chartRequest.get("/"+apiName,{params:{tableschema:localStorage.getItem("tableschema")}}).then(function(res){
+            chartRequest.get("/"+apiName,{params:{tableschema:localStorage.getItem("tableschema"),conditions:conditionValue},paramsSerializer: params => {
+                return qs.stringify(params)
+              }}).then(function(res){
                 let aachart = CommonUtil.chart[chartType](id,res.data,options);
                 setChart(aachart);
             })
         })
-    },[]);
+        
+    },[search]);
     return (
         <div className={classes.DashboardItem}>{chart}</div>
     );

@@ -5,7 +5,7 @@ import TabPanel from '../../Components/TabPanel';
 import Box from '@mui/material/Box';
 import { indexRequest } from "../../apiroute";
 import { useDispatch, useSelector } from 'react-redux';
-import { setTabValue } from '../../Redux/Reducers/IndexReducer';
+import { setTabValue,setSearch } from '../../Redux/Reducers/IndexReducer';
 
 const HomeTabs = ({children}) => {
     const dispatch = useDispatch();
@@ -13,6 +13,7 @@ const HomeTabs = ({children}) => {
     const [tablist,setTablList] = useState([]);
     const handleChange = (event, newValue) => {
         dispatch(setTabValue(newValue));
+        dispatch(setSearch());
     };
     useEffect(()=>{
         indexRequest.get("/GetTabs").then(function(res){

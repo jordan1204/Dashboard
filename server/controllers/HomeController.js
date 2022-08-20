@@ -30,4 +30,10 @@ homeController.get('/GetDashboardDataBinds',async function (req, res) {
     res.send({layouts:layouts,ids:ids});
 });
 
+homeController.get('/GetConditionType',async function(req,res){
+    const dashboard_id = req.query.dashboard_id;
+    var condition = await homeHandler.GetConditionTypeByDashboardId(dashboard_id);
+    res.send(condition);
+})
+
 module.exports = homeController;

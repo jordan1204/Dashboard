@@ -33,7 +33,7 @@ const ChartHandler = {
     },
     GetDutyDetailData:async(tableschema,year,month)=>{
 
-        var DutydetailData = await db.FindList(`SELECT duty_day As labels,COUNT(*) As value FROM ${tableschema}.duty_detail Where duty_year = '2022' and duty_month = '08' GROUP BY duty_day`)
+        var DutydetailData = await db.FindListWithParameter(`SELECT duty_day As labels,COUNT(*) As value FROM ${tableschema}.duty_detail Where duty_year = $1 and duty_month = $2 GROUP BY duty_day`,[year,month])
         var labels = [];
         var datasets = [{label:"All",data:[]}];
 
@@ -55,8 +55,8 @@ const ChartHandler = {
         return {labels:labels,datasets:datasets};
     },
     GetPaymentCodeData:async(tableschema,year,month)=>{
-        var PaymentCodeData = await db.FindList(`SELECT paymentcode As labels,COUNT(*) As value FROM ${tableschema}.duty_detail Where duty_year = '2022'
-        and duty_month = '08' GROUP BY paymentcode`)
+        var PaymentCodeData = await db.FindListWithParameter(`SELECT paymentcode As labels,COUNT(*) As value FROM ${tableschema}.duty_detail Where duty_year = $1
+        and duty_month = $2 GROUP BY paymentcode`,[year,month])
         var labels = [];
         var datasets = [{label:"All",data:[]}];
 

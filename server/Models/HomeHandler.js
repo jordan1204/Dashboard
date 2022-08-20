@@ -12,6 +12,10 @@ const HomeHandler = {
     GetDashboardDataBindList:async(dashboard_id)=>{
         var dashboarddatabindList = await db.FindListWithParameter('SELECT chart_id,lg,md,sm,xs,xxs FROM dashboard.sys_dashboard_databind Where dashboard_id = $1',[dashboard_id]);
         return dashboarddatabindList;
+    },
+    GetConditionTypeByDashboardId:async(dashboard_id)=>{
+        var condition = await db.FindOneWithParameter('SELECT condition FROM dashboard.sys_dashboard Where data_id = $1',[dashboard_id]);
+        return condition;
     }
 }
 
