@@ -66,6 +66,8 @@ const ChartHandler = {
         });
         return {labels:labels,datasets:datasets};
     }
+
+    
 }
 
 module.exports = ChartHandler;

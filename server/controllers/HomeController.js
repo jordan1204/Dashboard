@@ -36,4 +36,10 @@ homeController.get('/GetConditionType',async function(req,res){
     res.send(condition);
 })
 
+homeController.get('/GetCertificates',async function (req, res) {
+    const tableschema = req.query.tableschema;
+    var dashboardList = await homeHandler.GetCertificateList(tableschema);
+    res.send(dashboardList);
+});
+
 module.exports = homeController;

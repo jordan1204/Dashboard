@@ -16,6 +16,12 @@ const HomeHandler = {
     GetConditionTypeByDashboardId:async(dashboard_id)=>{
         var condition = await db.FindOneWithParameter('SELECT condition FROM dashboard.sys_dashboard Where data_id = $1',[dashboard_id]);
         return condition;
+    },
+
+    GetCertificateList:async (tableschema)=>{
+        var CertificateList = await db.FindList(` select Code_no as value , CODE_NAME  as name from  ${tableschema}.CODE_TYPE  where CODE_TYPE='Nurse_Certificate' `);
+       
+        return  CertificateList
     }
 }
 
