@@ -1,4 +1,5 @@
 const { Pool} = require('pg');
+const sql = require('yesql').pg;
 
 class Postgres {
     #_pool = null;
@@ -19,8 +20,8 @@ class Postgres {
       return res.rows;
     }
 
-    async FindListWithParameter(sql,params){
-      var res = await this.#_pool.query(sql,params);
+    async FindListWithParameter(sqlText,params){
+      var res = await this.#_pool.query(sql(sqlText)(params));
       return res.rows;
     }
 
@@ -29,8 +30,8 @@ class Postgres {
       return res.rows[0];
     }
 
-    async FindOneWithParameter(sql,params){
-      var res = await this.#_pool.query(sql,params);
+    async FindOneWithParameter(sqlText,params){
+      var res = await this.#_pool.query(sql(sqlText)(params));
       return res.rows[0];
     }
 
@@ -40,8 +41,8 @@ class Postgres {
       return res.rows[0][keys[0]];
     }
 
-    async FindScalarWithParameter(sql,params){
-      var res = await this.#_pool.query(sql,params);
+    async FindScalarWithParameter(sqlText,params){
+      var res = await this.#_pool.query(sql(sqlText)(params));
       var keys = Object.keys(res.rows[0]);
       return res.rows[0][keys[0]];
     }
@@ -52,8 +53,8 @@ class Postgres {
       return;
     }
 
-    async ExecuteWithParameter(sql,params){
-      await this.#_pool.query(sql,params);
+    async ExecuteWithParameter(sqlText,params){
+      await this.#_pool.query(sql(sqlText)(params));
       return;
     }
 

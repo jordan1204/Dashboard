@@ -25,14 +25,10 @@ const SearchConditions = ()=>{
 
     return (
         <Box sx={{ width: '100%',paddingTop:'25px',paddingBottom:'25px',paddingLeft:'20px' }}>
-             <Grid container alignItems={"center"}>
-                <Grid item xs={12} md={4}>
-                    {condition}
-                </Grid>
-                <Grid item xs={8}>
-                    <Button variant="contained" color="primary" onClick={handleSearch}>查詢</Button>
-                </Grid>
-             </Grid>
+            <Box sx={{display:'flex',maxWidth:"300px",width:"100%",marginBottom:"10px"}}>
+                {condition}
+            </Box>
+            <Button variant="contained" color="primary" onClick={handleSearch}>查詢</Button>
         </Box>
     );
 }

@@ -2,7 +2,7 @@ import React from "react";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import FormControl from "@mui/material/FormControl";
 import { useDispatch, useSelector } from 'react-redux';
 import { setConditionValue } from "../Redux/Reducers/IndexReducer";
@@ -30,42 +30,38 @@ const YearMonthSelector = () => {
     monthList.push(i);
   }
   return (
-    <Grid container>
-      <Grid item xs={12} md={6}>
-        <FormControl fulleWidth>
-          <InputLabel id="year-select">年</InputLabel>
-          <Select
-            labelId="year-select"
-            value={conditionValue.year}
-            onChange={handleChangeYear}
-            label="年"
-          >
-            {
-              yearList.map(function (el) {
-                return (<MenuItem value={el}>{el}</MenuItem>)
-              })
-            }
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item xs={12} md={3}>
-        <FormControl fullWidth>
-          <InputLabel id="month-select">月</InputLabel>
-          <Select
-            labelId="month-select"
-            value={conditionValue.month}
-            onChange={handleChangeMonth}
-            label="月"
-          >
-            {
-              monthList.map(function (el) {
-                return (<MenuItem value={el}>{el}</MenuItem>)
-              })
-            }
-          </Select>
-        </FormControl>
-      </Grid>
-    </Grid>
+    <div>
+      <FormControl sx={{marginRight:"20px"}}>
+        <InputLabel id="year-select">年</InputLabel>
+        <Select
+          labelId="year-select"
+          value={conditionValue.year}
+          onChange={handleChangeYear}
+          label="年"
+        >
+          {
+            yearList.map(function (el) {
+              return (<MenuItem value={el}>{el}</MenuItem>)
+            })
+          }
+        </Select>
+      </FormControl>
+      <FormControl>
+        <InputLabel id="month-select">月</InputLabel>
+        <Select
+          labelId="month-select"
+          value={conditionValue.month}
+          onChange={handleChangeMonth}
+          label="月"
+        >
+          {
+            monthList.map(function (el) {
+              return (<MenuItem value={el}>{el}</MenuItem>)
+            })
+          }
+        </Select>
+      </FormControl>
+      </div>
 
   );
 }
