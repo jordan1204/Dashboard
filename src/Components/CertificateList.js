@@ -25,6 +25,7 @@ const CertificateList = ()=>{
     }
 
     return (<Autocomplete
+        size="small"
         fullWidth
         value={value}
         getOptionLabel={(option)=>option.name}

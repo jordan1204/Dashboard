@@ -31,7 +31,7 @@ const YearMonthSelector = () => {
   }
   return (
     <div>
-      <FormControl sx={{marginRight:"20px"}}>
+      <FormControl sx={{marginRight:"20px"}} size="small">
         <InputLabel id="year-select">年</InputLabel>
         <Select
           labelId="year-select"
@@ -46,7 +46,7 @@ const YearMonthSelector = () => {
           }
         </Select>
       </FormControl>
-      <FormControl>
+      <FormControl size="small">
         <InputLabel id="month-select">月</InputLabel>
         <Select
           labelId="month-select"
