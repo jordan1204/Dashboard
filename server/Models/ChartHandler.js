@@ -6,7 +6,14 @@ const ChartHandler = {
         return info;
     },
     GetNurseSexData : async (tableschema,certificate)=>{
-        var nursesexData = await db.FindListWithParameter(`SELECT CASE WHEN nurse_sex = '1' THEN '男' ELSE '女' END AS labels,COUNT(*) AS value FROM ${tableschema}."Nurse_Sex"  Where nurse_certificate = :certificate GROUP BY nurse_sex ORDER BY nurse_sex asc`,{certificate:certificate});
+        var certificateCondition = "";
+        if(!certificate){
+            certificateCondition = "nurse_certificate IS NULL";
+        }
+        else{
+            certificateCondition = "nurse_certificate = :certificate";
+        }
+        var nursesexData = await db.FindListWithParameter(`SELECT CASE WHEN nurse_sex = '1' THEN '男' ELSE '女' END AS labels,COUNT(*) AS value FROM ${tableschema}."Nurse_Sex"  Where ${certificateCondition} GROUP BY nurse_sex ORDER BY nurse_sex asc`,{certificate:certificate});
         
         var labels = [];
         var datasets = [{label:"All",data:[]}];
@@ -22,33 +29,55 @@ const ChartHandler = {
         return {labels:labels,datasets:datasets,datas:datas};
     },
     GetNurseAgeData:async (tableschema,certificate)=>{
+        var certificateCondition = "";
+        if(!certificate){
+            certificateCondition = "b.nurse_certificate IS NULL";
+        }
+        else{
+            certificateCondition = "b.nurse_certificate = :certificate";
+        }
         var labels = ["30歲以下","30~40歲","40~50歲","50~60歲","60歲以上"];
         var queryArray = [
             db.FindScalarWithParameter(`SELECT COUNT(*) As value FROM ${tableschema}.nurse 
-                RIGHT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
-                    nurse_certificate.nurse_certificate
-                   FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
-                Where nurse.nurse_birthday IS NOT NULL AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) <=30 AND b.nurse_certificate = :certificate`,{certificate:certificate}),
+            LEFT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
+            nurse_certificate.nurse_certificate
+            FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
+            Where nurse.nurse_birthday IS NOT NULL
+            AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) <30 AND nurse.organization_id = '1' AND nurse.site_id = '1' AND nurse.status = '1'
+            AND (nurse.cancel_flag is null or nurse.cancel_flag = 'N')
+            AND ${certificateCondition}`,{certificate:certificate}),
             db.FindScalarWithParameter(`SELECT COUNT(*) As value FROM ${tableschema}.nurse 
-                RIGHT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
-                nurse_certificate.nurse_certificate
-                FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
-                Where nurse.nurse_birthday IS NOT NULL AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) >30 AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) <=40 AND b.nurse_certificate = :certificate`,{certificate:certificate}),
+            LEFT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
+            nurse_certificate.nurse_certificate
+            FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
+            Where nurse.nurse_birthday IS NOT NULL AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) >30 
+            AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) <=40 AND nurse.organization_id = '1' AND nurse.site_id = '1' AND nurse.status = '1'
+            AND (nurse.cancel_flag is null or nurse.cancel_flag = 'N')
+            AND ${certificateCondition}`,{certificate:certificate}),
             db.FindScalarWithParameter(`SELECT COUNT(*) As value FROM ${tableschema}.nurse 
-                RIGHT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
-                nurse_certificate.nurse_certificate
-                FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
-                Where nurse.nurse_birthday IS NOT NULL AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) >40 AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) <=50 AND b.nurse_certificate = :certificate`,{certificate:certificate}),
+            LEFT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
+            nurse_certificate.nurse_certificate
+            FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
+            Where nurse.nurse_birthday IS NOT NULL AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) >40 
+            AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) <=50 AND nurse.organization_id = '1' AND nurse.site_id = '1' AND nurse.status = '1'
+            AND (nurse.cancel_flag is null or nurse.cancel_flag = 'N')
+            AND ${certificateCondition}`,{certificate:certificate}),
             db.FindScalarWithParameter(`SELECT COUNT(*) As value FROM ${tableschema}.nurse 
-                RIGHT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
-                nurse_certificate.nurse_certificate
-                FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
-                Where nurse.nurse_birthday IS NOT NULL AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) >50 AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) <=60 AND b.nurse_certificate = :certificate`,{certificate:certificate}),
+            LEFT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
+            nurse_certificate.nurse_certificate
+            FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
+            Where nurse.nurse_birthday IS NOT NULL AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) >50 
+            AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) <=60 AND nurse.organization_id = '1' AND nurse.site_id = '1' AND nurse.status = '1'
+            AND (nurse.cancel_flag is null or nurse.cancel_flag = 'N')
+            AND ${certificateCondition}`,{certificate:certificate}),
             db.FindScalarWithParameter(`SELECT COUNT(*) As value FROM ${tableschema}.nurse 
-            RIGHT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
-                nurse_certificate.nurse_certificate
-                FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
-            Where nurse.nurse_birthday IS NOT NULL  AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) >60 AND b.nurse_certificate = :certificate`,{certificate:certificate}),
+            LEFT JOIN (SELECT DISTINCT nurse_certificate.upper_guid,
+            nurse_certificate.nurse_certificate
+            FROM ${tableschema}.nurse_certificate) b ON nurse.guid = b.upper_guid 
+            Where nurse.nurse_birthday IS NOT NULL AND cast(date_part('year',age(now(),nurse.nurse_birthday)) as int) >60
+            AND nurse.organization_id = '1' AND nurse.site_id = '1' AND nurse.status = '1'
+            AND (nurse.cancel_flag is null or nurse.cancel_flag = 'N')
+            AND ${certificateCondition}`,{certificate:certificate}),
         ];
         var ageData = await Promise.all(queryArray);
         var datasets = [{label:"All",data:ageData}];
@@ -61,7 +90,7 @@ const ChartHandler = {
         return {labels:labels,datasets:datasets,datas:datas};
     },
     GetDutyDetailData:async(tableschema,year,month)=>{
-
+        
         var DutydetailData = await db.FindListWithParameter(`SELECT duty_day As labels,COUNT(*) As value FROM ${tableschema}.duty_detail Where duty_year = :duty_year and duty_month = :duty_month GROUP BY duty_day`,{duty_year:year,duty_month:month})
         var labels = [];
         var datasets = [{label:"All",data:[]}];
@@ -76,7 +105,14 @@ const ChartHandler = {
         return {labels:labels,datasets:datasets,datas:datas};
     },
     GetDistrictData:async(tableschema,certificate)=>{
-        var districtData = await db.FindListWithParameter(`SELECT county_name,township_name,COUNT(*) AS value FROM ${tableschema}."Nurse_County_Ship" Where Nurse_Certificate = :certificate GROUP BY COUNTY_NAME,TOWNSHIP_NAME`,{certificate:certificate});
+        var certificateCondition = "";
+        if(!certificate){
+            certificateCondition = " Nurse_Certificate IS NULL";
+        }
+        else{
+            certificateCondition = "Nurse_Certificate = :certificate";
+        }
+        var districtData = await db.FindListWithParameter(`SELECT county_name,township_name,COUNT(*) AS value FROM ${tableschema}."Nurse_County_Ship" Where ${certificateCondition} GROUP BY COUNTY_NAME,TOWNSHIP_NAME`,{certificate:certificate});
         var labels = [];
         var datasets = [{label:"All",data:[]}];
         var datas = {columns:["區域","數量"],rows:[]};

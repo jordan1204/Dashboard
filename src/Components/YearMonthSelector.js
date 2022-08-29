@@ -36,7 +36,6 @@ const YearMonthSelector = () => {
           labelId="year-select"
           value={conditionValue.year}
           onChange={handleChangeYear}
-          label="年"
         >
           {
             yearList.map(function (el) {
@@ -51,7 +50,6 @@ const YearMonthSelector = () => {
           labelId="month-select"
           value={conditionValue.month}
           onChange={handleChangeMonth}
-          label="月"
         >
           {
             monthList.map(function (el) {

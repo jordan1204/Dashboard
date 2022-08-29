@@ -12,7 +12,7 @@ const Const={
     InitialCondition:{
       year:new Date().getFullYear(),
       month:new Date().getMonth()+1,
-      certificateVal:-1
+      certificateVal:null
     }
 }
 

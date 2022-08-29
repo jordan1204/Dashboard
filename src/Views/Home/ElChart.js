@@ -7,10 +7,8 @@ import qs from 'qs';
 import DetailButton from "../../Components/DetailButton";
 import {
   usePopupState,
-  bindPopover,
   bindTrigger,
   bindMenu,
-  anchorRef,
 } from 'material-ui-popup-state/hooks';
 import ContextMenu from "./ContextMenu";
 

@@ -21,7 +21,7 @@ const HomeHandler = {
 
     GetCertificateList:async (tableschema)=>{
         var CertificateList = await db.FindList(` select Code_no as value , CODE_NAME  as name from  ${tableschema}.CODE_TYPE  where CODE_TYPE='Nurse_Certificate' `);
-       
+        CertificateList.unshift({name:'',value:null})
         return  CertificateList
     },
 

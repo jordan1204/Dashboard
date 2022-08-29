@@ -13,10 +13,6 @@ chartController.get("/nurse_sex",async function(req,res){
     const tableschema = req.query.tableschema;
     const conditions = req.query.conditions;
     let value = conditions.certificateVal;
-    if(value==-1){
-        let list = await homeHandler.GetCertificateList(tableschema);
-        value = list[0].value;
-    }
     const chartData = await chartHandler.GetNurseSexData(tableschema,value);
     res.send(chartData);
 });
@@ -25,10 +21,6 @@ chartController.get("/nurse_age",async function(req,res){
     const tableschema = req.query.tableschema;
     const conditions = req.query.conditions;
     let value = conditions.certificateVal;
-    if(value==-1){
-        let list = await homeHandler.GetCertificateList(tableschema);
-        value = list[0].value;
-    }
     const chartData = await chartHandler.GetNurseAgeData(tableschema,value);
     res.send(chartData);
 });
